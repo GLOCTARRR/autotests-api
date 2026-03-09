@@ -2,7 +2,8 @@ import asyncio
 
 import websockets
 
-from websockets_services.constants import WS_SERVER_PORT, WS_SERVER_HOST
+from websockets_services.constants import WS_SERVER_HOST, WS_SERVER_PORT
+
 
 async def client():
     uri = f"ws://{WS_SERVER_HOST}:{WS_SERVER_PORT}"
@@ -14,5 +15,6 @@ async def client():
         for _ in range(5):
             response = await websocket.recv()
             print(f"Ответ от сервера: {response}")
+
 
 asyncio.run(client())
