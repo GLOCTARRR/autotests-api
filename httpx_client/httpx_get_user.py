@@ -1,9 +1,9 @@
 import httpx
 
-from httpx_client.constants import HOST
+from httpx_client.constants import HOST, PASSWORD
 
 
-def login(email, password):
+def login(email: str, password: str) -> dict:
     payload = {"email": email, "password": password}
     response = httpx.post(f"{HOST}/api/v1/authentication/login", json=payload)
     print(response.json())
@@ -11,7 +11,7 @@ def login(email, password):
     return response.json()
 
 
-def me(access_token):
+def me(access_token: str):
     headers = {"Authorization": f"Bearer {access_token}"}
 
     response = httpx.get(f"{HOST}/api/v1/users/me", headers=headers)
@@ -21,5 +21,5 @@ def me(access_token):
 
 
 if __name__ == "__main__":
-    auth_data = login("gloctarr@example.com", "123456")
+    auth_data = login("gloctarr@example.com", PASSWORD)
     me(auth_data["token"]["accessToken"])
