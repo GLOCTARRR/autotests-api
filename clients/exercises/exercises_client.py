@@ -1,0 +1,92 @@
+from httpx import Response
+from typing import TypedDict
+
+from clients.api_client import APIClient
+
+
+class GetExercisesQueryDict(TypedDict):
+    """
+    Описание структура запроса на получение списка заданий для курса
+    """
+
+    courseId: str
+
+
+class CreateExerciseRequestDict(TypedDict):
+    """
+    Описание структуры запроса на создание задания.
+    """
+
+    title: str
+    courseId: str
+    maxScore: str
+    minScore: int
+    orderIndex: int
+    description: int
+    estimatedTime: str
+
+
+class UpdateExerciseRequestDict(TypedDict):
+    """
+    Описание структуры запроса на обновление задания.
+    """
+
+    title: str | None
+    maxScore: str | None
+    minScore: int | None
+    orderIndex: int | None
+    description: int | None
+    estimatedTime: str | None
+
+
+class ExercisesClient(APIClient):
+    """
+    Клиент для работы /api/v1/exercises
+    """
+
+    def get_exercises_api(self, query: GetExercisesQueryDict) -> Response:
+        """
+        Метод получение списка заданий для определенного курса
+
+        :param query: Словарь с courseId.
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
+        return self.get("/api/v1/exercises", params=query)
+
+    def get_exercise_api(self, exercise_id: str) -> Response:
+        """
+        Метод получения задания по exercise_id
+
+        :param exercise_id: Идентификатор задания.
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
+        return self.get(f"/api/v1/exercises/{exercise_id}")
+
+    def create_exercise_api(self, request: CreateExerciseRequestDict):
+        """
+        Метод создания задания
+
+        :param request: Словарь с title, courseId, maxScore, minScore, orderIndex, description, estimatedTime
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
+        return self.post("/api/v1/exercises", json=request)
+
+    def update_exercise_api(
+        self, exercise_id: str, request: UpdateExerciseRequestDict
+    ) -> Response:
+        """
+        Метод обновления задания
+
+        :param request: Словарь с title, courseId, maxScore, minScore, orderIndex, description, estimatedTime
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
+        return self.post(f"/api/v1/exercises/{exercise_id}", json=request)
+
+    def delete_exercise_api(self, exercise_id: str) -> Response:
+        """
+        Метод удаления заданя.
+
+        :param exercise_id: Идентификатор задания.
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
+        return self.delete(f"/api/v1/exercises/{exercise_id}")
