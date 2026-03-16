@@ -6,6 +6,9 @@ from clients.courses.courses_schema import (
     CreateCourseRequestSchema,
     UpdateCourseRequestSchema,
     CreateCourseResponseSchema,
+    GetCoursesResponseSchema,
+    GetCourseResponseSchema,
+    UpdateCourseResponseSchema,
 )
 from clients.private_http_builder import (
     get_private_http_client,
@@ -72,10 +75,22 @@ class CoursesClient(APIClient):
     def create_course(
         self, request: CreateCourseRequestSchema
     ) -> CreateCourseResponseSchema:
-        print(request)
         response = self.create_course_api(request)
-        print(response)
         return CreateCourseResponseSchema.model_validate_json(response.text)
+
+    def get_course(self, course_id: str) -> GetCourseResponseSchema:
+        response = self.get_course_api(course_id=course_id)
+        return GetCourseResponseSchema.model_validate_json(response.text)
+
+    def get_courses(self, query: GetCoursesQuerySchema) -> GetCoursesResponseSchema:
+        response = self.get_courses_api(query=query)
+        return GetCoursesResponseSchema.model_validate_json(response.text)
+
+    def update_course(
+        self, course_id: str, request: UpdateCourseRequestSchema
+    ) -> UpdateCourseResponseSchema:
+        response = self.update_course_api(course_id=course_id, request=request)
+        return UpdateCourseResponseSchema.model_validate_json(response.text)
 
 
 def get_courses_client(user: AuthenticationUserSchema) -> CoursesClient:

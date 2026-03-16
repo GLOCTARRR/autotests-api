@@ -10,7 +10,23 @@ class ExerciseSchema(BaseModel):
 
     id: str
     title: str
-    courseId: str
+    course_id: str = Field(alias="courseId")
+    max_score: int = Field(alias="maxScore")
+    min_score: int = Field(alias="minScore")
+    order_index: int = Field(alias="orderIndex")
+    description: str
+    estimated_time: str = Field(alias="estimatedTime")
+
+
+class CreateExerciseRequestSchema(BaseModel):
+    """
+    Описание структуры запроса на создание задания.
+    """
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    title: str
+    course_id: str = Field(alias="courseId")
     max_score: int = Field(alias="maxScore")
     min_score: int = Field(alias="minScore")
     order_index: int = Field(alias="orderIndex")
@@ -23,15 +39,15 @@ class CreateExerciseResponseSchema(BaseModel):
     Описание структуры ответа создания задания.
     """
 
-    exercises: ExerciseSchema
+    exercise: ExerciseSchema
 
 
-class GetExerciseResponseSchema(BaseModel):
+class GetExercisesQuerySchema(BaseModel):
     """
-    Описание структуры ответа получения задания.
+    Описание структура запроса на получение списка заданий для курса
     """
 
-    exercises: ExerciseSchema
+    course_id: str = Field(alias="courseId")
 
 
 class GetExercisesResponseSchema(BaseModel):
@@ -42,28 +58,12 @@ class GetExercisesResponseSchema(BaseModel):
     exercises: list[ExerciseSchema]
 
 
-class GetExercisesQuerySchema(BaseModel):
+class GetExerciseResponseSchema(BaseModel):
     """
-    Описание структура запроса на получение списка заданий для курса
-    """
-
-    courseId: str
-
-
-class CreateExerciseRequestSchema(BaseModel):
-    """
-    Описание структуры запроса на создание задания.
+    Описание структуры ответа получения задания.
     """
 
-    model_config = ConfigDict(populate_by_name=True)
-
-    title: str
-    courseId: str
-    max_score: int = Field(alias="maxScore")
-    min_score: int = Field(alias="minScore")
-    order_index: int = Field(alias="orderIndex")
-    description: str
-    estimated_time: str = Field(alias="estimatedTime")
+    exercise: ExerciseSchema
 
 
 class UpdateExerciseRequestSchema(BaseModel):
@@ -79,3 +79,11 @@ class UpdateExerciseRequestSchema(BaseModel):
     order_index: int | None = Field(alias="orderIndex")
     description: str | None
     estimated_time: str | None = Field(alias="estimatedTime")
+
+
+class UpdateExerciseResponseSchema(BaseModel):
+    """
+    Описание структуры ответа на обновление задания.
+    """
+
+    exercise: ExerciseSchema
